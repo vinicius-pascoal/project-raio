@@ -1,28 +1,38 @@
 const db = require('../modules/db');
 const { crypto } = require('../modules/hashPass');
 
-async function create(user) {
-  const { name, email, phone, password, address } = user;
+async function create(request) {
+  const { userId, products } = request;
 
-  const hash = await crypto(password);
+  const newRequest = await db.request.create({
+    data: {
+      user: { connect: { id: userId } },
+      products: { connect: products.map((id) => { return { id } }) }
+    }
+  });
 
-  const newUser = await db.user.create({ data: { name, address, email, password: hash, phone } })
-
-  return newUser;
+  return newRequest;
 }
 
 async function list() {
-  const users = await db.user.findMany();
+  const request = await db.request.findMany({ include: { products: true } });
 
-  return users;
+  return request;
 }
 
 async function remove(id) {
-  await db.user.delete({ where: { id } })
+  await db.request.delete({ where: { id } });
+}
+
+async function updateStatus(id, status) {
+  const request = await db.request.update({ where: { id }, data: { status } });
+
+  return request;
 }
 
 module.exports = {
   create,
   list,
   remove,
-};
+  updateStatus
+}

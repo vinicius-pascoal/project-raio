@@ -18,7 +18,7 @@ model User {
   password String
   address  String
 
-  requests Requests[]
+  requests Request[]
 }
 
 model Product {
@@ -26,16 +26,16 @@ model Product {
   name  String @unique
   price Int
 
-  requests Requests[]
+  requests Request[]
 }
 
-model Requests {
-  id     Int    @id @default(autoincrement())
-  data   Int
-  status String
+model Request {
+  id     Int      @id @default(autoincrement())
+  data   DateTime @default(now())
+  status String   @default("PENDING")
 
   user   User @relation(fields: [userId], references: [id])
   userId Int
 
-  product Product[]
+  products Product[]
 }
