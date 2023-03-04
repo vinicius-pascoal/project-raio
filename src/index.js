@@ -31,6 +31,7 @@ app.use(express.json());
 
 //definindo rotas
 app.use('/users', require('./routes/users'));
+app.use('/products', require('./routes/products'))
 
 // executando o servidor
 const port = process.env.PORT || 5050;

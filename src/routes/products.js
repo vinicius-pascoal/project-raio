@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const userService = require('../services/userService');
+const userService = require('../services/productsService');
 
 router.get('/', async (req, res) => {
   const list = await userService.list()
@@ -12,20 +12,20 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { name, email, phone, password, address } = req.body;
+  const { name, price } = req.body;
 
   // TODO: Validate data
 
-  const newUser = await userService.create({ name, email, phone, password, address });
+  const newUser = await userService.create({ name, price });
 
-  res.status(201).json({ message: `User ${newUser.id} created!` });
+  res.status(201).json({ message: `Product ${newUser.id} created!` });
 });
 
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   await userService.remove(parseInt(id));
 
-  res.json({ message: `O usuario ${id} foi deletado com sucesso!` });
+  res.json({ message: `Produto ${id} removido com sucesso` });
 });
 
 module.exports = router;
